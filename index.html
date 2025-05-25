@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Are You Secretly a Communist?</title>
     <style>
         * {
@@ -23,36 +23,47 @@
         }
 
         .app-container {
-            width: 90%;
+            width: 100%;
             max-width: 400px;
+            height: 100vh;
+            max-height: 800px;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             position: relative;
-            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 768px) {
+            .app-container {
+                height: 90vh;
+                border-radius: 20px;
+                margin: 20px;
+            }
         }
 
         .header {
             background: #DC143C;
             color: white;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 20px;
+            margin-bottom: 5px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .hammer-sickle {
-            font-size: 40px;
+            font-size: 30px;
             animation: rotate 20s linear infinite;
             display: inline-block;
-            margin: 10px;
+            margin: 0 10px;
         }
 
         @keyframes rotate {
@@ -62,18 +73,20 @@
 
         .question-container {
             position: relative;
-            height: 400px;
+            flex: 1;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .question-card {
             position: absolute;
             width: 100%;
             height: 100%;
-            padding: 30px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             text-align: center;
             background: white;
@@ -95,33 +108,55 @@
             opacity: 0;
         }
 
+        .question-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
         .question-number {
             color: #DC143C;
             font-size: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             font-weight: bold;
         }
 
         .question-text {
-            font-size: 20px;
+            font-size: 18px;
             color: #333;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        @media (min-width: 768px) {
+            .question-text {
+                font-size: 20px;
+            }
+        }
+
+        .true-false-info {
+            font-size: 14px;
+            color: #666;
             margin-bottom: 30px;
-            line-height: 1.4;
+            font-style: italic;
         }
 
         .swipe-buttons {
             display: flex;
             gap: 40px;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .swipe-btn {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            font-size: 30px;
+            font-size: 24px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
@@ -150,8 +185,9 @@
             height: 4px;
             background: #f0f0f0;
             position: relative;
-            margin: 20px;
+            margin: 15px 20px;
             border-radius: 2px;
+            flex-shrink: 0;
         }
 
         .progress-fill {
@@ -175,6 +211,7 @@
             color: white;
             text-align: center;
             padding: 20px;
+            z-index: 100;
         }
 
         .reveal-container.show {
@@ -197,9 +234,15 @@
         }
 
         .giant-symbol {
-            font-size: 120px;
+            font-size: 80px;
             animation: pulse 2s ease-in-out infinite;
             margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .giant-symbol {
+                font-size: 120px;
+            }
         }
 
         @keyframes pulse {
@@ -208,23 +251,24 @@
         }
 
         .reveal-text {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
             margin-bottom: 20px;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
         }
 
         .reveal-subtext {
-            font-size: 18px;
+            font-size: 16px;
             opacity: 0.9;
             margin-bottom: 30px;
+            line-height: 1.4;
         }
 
         .restart-btn {
             background: white;
             color: #DC143C;
             border: none;
-            padding: 15px 30px;
+            padding: 12px 25px;
             font-size: 16px;
             font-weight: bold;
             border-radius: 30px;
@@ -243,6 +287,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+            z-index: 0;
         }
 
         .floating-symbol {
@@ -262,42 +307,57 @@
         }
 
         .swipe-hint {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
+            font-size: 12px;
             color: #666;
             opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .btn-labels {
+            display: flex;
+            gap: 60px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="floating-symbols" id="floatingSymbols"></div>
-
+    
     <div class="app-container">
         <div class="header">
             <span class="hammer-sickle">☭</span>
             <h1>Are You Secretly a Communist?</h1>
             <span class="hammer-sickle">☭</span>
         </div>
-
+        
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
-
+        
         <div class="question-container" id="questionContainer">
             <div class="question-card" id="questionCard">
-                <div class="question-number" id="questionNumber">Question 1/15</div>
-                <div class="question-text" id="questionText"></div>
-                <div class="swipe-buttons">
-                    <button class="swipe-btn no-btn" onclick="swipeLeft()">✗</button>
-                    <button class="swipe-btn yes-btn" onclick="swipeRight()">✓</button>
+                <div class="question-content">
+                    <div class="question-number" id="questionNumber">Question 1/7</div>
+                    <div class="question-text" id="questionText"></div>
+                    <div class="true-false-info" id="trueFalseInfo"></div>
+                </div>
+                <div>
+                    <div class="swipe-buttons">
+                        <button class="swipe-btn no-btn" onclick="swipeLeft()">✗</button>
+                        <button class="swipe-btn yes-btn" onclick="swipeRight()">✓</button>
+                    </div>
+                    <div class="btn-labels" id="btnLabels">
+                        <span>No</span>
+                        <span>Yes</span>
+                    </div>
+                    <div class="swipe-hint">Answer honestly, comrade...</div>
                 </div>
             </div>
-            <div class="swipe-hint">Swipe left for NO, right for YES</div>
         </div>
-
+        
         <div class="reveal-container" id="revealContainer">
             <div class="giant-symbol">☭</div>
             <div class="reveal-text" id="revealText">COMRADE DETECTED!</div>
@@ -307,28 +367,98 @@
     </div>
 
     <script>
-        const questions = [
-            "When you hear 'sharing is caring', does your heart rate mysteriously increase by exactly 1917 bpm?",
-            "Have you ever looked at a billionaire's mega-yacht and thought 'that would make a great public library'?",
-            "Do you unconsciously arrange your red clothing items in the shape of a star?",
-            "When playing Monopoly, have you ever suggested everyone should just share Park Place?",
-            "Does the phrase 'seize the means of production' randomly pop into your head during meetings?",
-            "Have you ever felt an unexplainable urge to call your boss 'comrade' instead of their name?",
-            "Do you believe Amazon warehouses are just practice for the eventual redistribution centers?"
+        // Large question bank with mix of true/false and yes/no questions
+        const questionBank = [
+            {
+                text: "True or False: You've googled 'Karl Marx beard grooming tips' at least once.",
+                type: "true-false",
+                communistAnswer: true
+            },
+            {
+                text: "Do you think billionaires' space rockets are just expensive mid-life crisis toys?",
+                type: "yes-no",
+                communistAnswer: true
+            },
+            {
+                text: "True or False: When you see a 'Private Property' sign, you immediately think 'for now'.",
+                type: "true-false",
+                communistAnswer: true
+            },
+            {
+                text: "Have you ever referred to your friend group as 'the collective'?",
+                type: "yes-no",
+                communistAnswer: true
+            },
+            {
+                text: "True or False: You believe the Monopoly man is the ultimate capitalist villain.",
+                type: "true-false",
+                communistAnswer: true
+            },
+            {
+                text: "Do you get suspicious when someone owns more than one house?",
+                type: "yes-no",
+                communistAnswer: true
+            },
+            {
+                text: "True or False: You've unironically said 'there is no ethical consumption under capitalism' while buying coffee.",
+                type: "true-false",
+                communistAnswer: true
+            },
+            {
+                text: "When playing Monopoly, do you try to implement wealth redistribution rules?",
+                type: "yes-no",
+                communistAnswer: true
+            },
+            {
+                text: "True or False: Red is objectively the best color and this is not up for debate.",
+                type: "true-false",
+                communistAnswer: true
+            },
+            {
+                text: "Do you believe Amazon warehouses should be converted into community centers?",
+                type: "yes-no",
+                communistAnswer: true
+            },
+            {
+                text: "True or False: You've hummed the Soviet anthem 'just to see how it sounds'.",
+                type: "true-false",
+                communistAnswer: true
+            },
+            {
+                text: "Have you ever thought your boss makes too much money for too little work?",
+                type: "yes-no",
+                communistAnswer: true
+            },
+            {
+                text: "True or False: CEOs are just modern-day feudal lords with better PR.",
+                type: "true-false",
+                communistAnswer: true
+            },
+            {
+                text: "Do you think 'sharing economy' apps don't share enough?",
+                type: "yes-no",
+                communistAnswer: true
+            },
+            {
+                text: "True or False: You've fantasized about turning golf courses into public housing.",
+                type: "true-false",
+                communistAnswer: true
+            }
         ];
 
-        let currentQuestion = 0;
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
         let answers = [];
 
         function init() {
             createFloatingSymbols();
-            showQuestion();
+            setupQuiz();
         }
 
         function createFloatingSymbols() {
             const container = document.getElementById('floatingSymbols');
             const symbols = ['☭', '★', '☭', '★', '☭'];
-
+            
             for (let i = 0; i < 10; i++) {
                 const symbol = document.createElement('div');
                 symbol.className = 'floating-symbol';
@@ -340,36 +470,66 @@
             }
         }
 
+        function setupQuiz() {
+            // Randomly select 7 questions from the bank
+            const shuffled = [...questionBank].sort(() => Math.random() - 0.5);
+            currentQuestions = shuffled.slice(0, 7);
+            currentQuestionIndex = 0;
+            answers = [];
+            showQuestion();
+        }
+
         function showQuestion() {
             const card = document.getElementById('questionCard');
             const questionText = document.getElementById('questionText');
             const questionNumber = document.getElementById('questionNumber');
+            const trueFalseInfo = document.getElementById('trueFalseInfo');
+            const btnLabels = document.getElementById('btnLabels');
             const progressFill = document.getElementById('progressFill');
-
-            questionText.textContent = questions[currentQuestion];
-            questionNumber.textContent = `Question ${currentQuestion + 1}/7`;
-            progressFill.style.width = ((currentQuestion / 7) * 100) + '%';
-
+            
+            const question = currentQuestions[currentQuestionIndex];
+            
+            questionText.textContent = question.text;
+            questionNumber.textContent = `Question ${currentQuestionIndex + 1}/7`;
+            progressFill.style.width = ((currentQuestionIndex / 7) * 100) + '%';
+            
+            // Update button labels based on question type
+            if (question.type === 'true-false') {
+                trueFalseInfo.textContent = '';
+                btnLabels.innerHTML = '<span>False</span><span>True</span>';
+            } else {
+                trueFalseInfo.textContent = '';
+                btnLabels.innerHTML = '<span>No</span><span>Yes</span>';
+            }
+            
             card.classList.remove('hidden', 'swiped-left', 'swiped-right');
         }
 
         function swipeLeft() {
-            answers.push(false);
+            const question = currentQuestions[currentQuestionIndex];
+            answers.push({
+                answer: false,
+                alignsWithCommunism: question.communistAnswer === false
+            });
             animateSwipe('left');
         }
 
         function swipeRight() {
-            answers.push(true);
+            const question = currentQuestions[currentQuestionIndex];
+            answers.push({
+                answer: true,
+                alignsWithCommunism: question.communistAnswer === true
+            });
             animateSwipe('right');
         }
 
         function animateSwipe(direction) {
             const card = document.getElementById('questionCard');
             card.classList.add(`swiped-${direction}`);
-
+            
             setTimeout(() => {
-                currentQuestion++;
-                if (currentQuestion < questions.length) {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < currentQuestions.length) {
                     showQuestion();
                 } else {
                     showReveal();
@@ -381,10 +541,15 @@
             const revealContainer = document.getElementById('revealContainer');
             const revealText = document.getElementById('revealText');
             const revealSubtext = document.getElementById('revealSubtext');
-
-            // 80% chance of being communist no matter what
-            const isCommunist = Math.random() < 0.8;
-
+            
+            // Count communist-aligned answers
+            const communistScore = answers.filter(a => a.alignsWithCommunism).length;
+            
+            // 80% chance of being communist, but also consider their answers slightly
+            const baseChance = 0.8;
+            const answerInfluence = (communistScore / 7) * 0.2;
+            const isCommunist = Math.random() < (baseChance + answerInfluence - 0.1);
+            
             if (isCommunist) {
                 revealText.textContent = "COMRADE DETECTED!";
                 revealSubtext.textContent = "Welcome to the party, товарищ! Your revolutionary spirit burns bright!";
@@ -394,9 +559,9 @@
                 revealSubtext.textContent = "But we're watching you... 👁️";
                 document.body.style.background = "linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%)";
             }
-
+            
             revealContainer.classList.add('show');
-
+            
             // Add confetti effect
             createConfetti();
         }
@@ -413,18 +578,17 @@
                 confetti.style.opacity = '0.8';
                 confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
                 confetti.style.animation = `fall ${2 + Math.random() * 2}s linear`;
+                confetti.style.zIndex = '101';
                 document.body.appendChild(confetti);
-
+                
                 setTimeout(() => confetti.remove(), 4000);
             }
         }
 
         function restart() {
-            currentQuestion = 0;
-            answers = [];
             document.getElementById('revealContainer').classList.remove('show');
             document.body.style.background = "linear-gradient(135deg, #8B0000 0%, #DC143C 100%)";
-            showQuestion();
+            setupQuiz();
         }
 
         // CSS for confetti animation
