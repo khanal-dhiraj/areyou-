@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Are You Secretly a Communist?</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -20,47 +21,39 @@
             justify-content: center;
             overflow: hidden;
             position: relative;
+            touch-action: manipulation;
         }
 
         .app-container {
-            width: 100%;
-            max-width: 400px;
-            height: 100vh;
-            max-height: 800px;
+            width: 95%;
+            max-width: 420px;
             background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @media (min-width: 768px) {
-            .app-container {
-                height: 90vh;
-                border-radius: 20px;
-                margin: 20px;
-            }
+            height: 90vh;
+            max-height: 700px;
+            min-height: 600px;
         }
 
         .header {
             background: #DC143C;
             color: white;
-            padding: 15px;
+            padding: 15px 20px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            flex-shrink: 0;
         }
 
         .header h1 {
-            font-size: 20px;
-            margin-bottom: 5px;
+            font-size: clamp(20px, 5vw, 24px);
+            margin-bottom: 8px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .hammer-sickle {
-            font-size: 30px;
+            font-size: clamp(30px, 8vw, 40px);
             animation: rotate 20s linear infinite;
             display: inline-block;
             margin: 0 10px;
@@ -73,10 +66,8 @@
 
         .question-container {
             position: relative;
-            flex: 1;
+            height: calc(100% - 140px);
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
 
         .question-card {
@@ -86,11 +77,12 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
             text-align: center;
             background: white;
             transition: transform 0.3s ease, opacity 0.3s ease;
+            padding-top: 40px;
         }
 
         .question-card.hidden {
@@ -108,92 +100,88 @@
             opacity: 0;
         }
 
-        .question-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
         .question-number {
             color: #DC143C;
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 20px;
             font-weight: bold;
         }
 
         .question-text {
-            font-size: 18px;
+            font-size: clamp(18px, 4.5vw, 22px);
             color: #333;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            padding: 0 10px;
-        }
-
-        @media (min-width: 768px) {
-            .question-text {
-                font-size: 20px;
-            }
-        }
-
-        .true-false-info {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 30px;
-            font-style: italic;
+            margin-bottom: 40px;
+            line-height: 1.4;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            max-width: 100%;
+            word-wrap: break-word;
+            hyphens: auto;
         }
 
         .swipe-buttons {
             display: flex;
-            gap: 40px;
-            margin-bottom: 20px;
+            gap: 50px;
+            margin-bottom: 40px;
+            justify-content: center;
+            width: 100%;
         }
 
         .swipe-btn {
-            width: 70px;
-            height: 70px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            font-size: 24px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 36px;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .no-btn {
             background: #fff;
             color: #DC143C;
-            border: 3px solid #DC143C;
+            border: 4px solid #DC143C;
         }
 
         .yes-btn {
             background: #DC143C;
             color: white;
-        }
-
-        .swipe-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border: 4px solid #DC143C;
         }
 
         .swipe-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.9);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (hover: hover) {
+            .swipe-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            }
         }
 
         .progress-bar {
-            height: 4px;
+            height: 6px;
             background: #f0f0f0;
             position: relative;
             margin: 15px 20px;
-            border-radius: 2px;
-            flex-shrink: 0;
+            border-radius: 3px;
         }
 
         .progress-fill {
             height: 100%;
             background: #DC143C;
-            border-radius: 2px;
+            border-radius: 3px;
             transition: width 0.3s ease;
         }
 
@@ -211,7 +199,6 @@
             color: white;
             text-align: center;
             padding: 20px;
-            z-index: 100;
         }
 
         .reveal-container.show {
@@ -234,15 +221,9 @@
         }
 
         .giant-symbol {
-            font-size: 80px;
+            font-size: clamp(80px, 20vw, 120px);
             animation: pulse 2s ease-in-out infinite;
             margin-bottom: 20px;
-        }
-
-        @media (min-width: 768px) {
-            .giant-symbol {
-                font-size: 120px;
-            }
         }
 
         @keyframes pulse {
@@ -251,35 +232,44 @@
         }
 
         .reveal-text {
-            font-size: 28px;
+            font-size: clamp(24px, 7vw, 32px);
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
         }
 
         .reveal-subtext {
-            font-size: 16px;
+            font-size: clamp(16px, 4vw, 18px);
             opacity: 0.9;
             margin-bottom: 30px;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         .restart-btn {
             background: white;
             color: #DC143C;
             border: none;
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 18px 35px;
+            font-size: 18px;
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            touch-action: manipulation;
+            min-height: 54px;
         }
 
-        .restart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        .restart-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        @media (hover: hover) {
+            .restart-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            }
         }
 
         .floating-symbols {
@@ -287,7 +277,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0;
+            z-index: -1;
         }
 
         .floating-symbol {
@@ -307,19 +297,36 @@
         }
 
         .swipe-hint {
-            font-size: 12px;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
             color: #666;
-            opacity: 0.8;
-            margin-bottom: 20px;
+            opacity: 0.7;
         }
 
-        .btn-labels {
-            display: flex;
-            gap: 60px;
-            margin-top: -10px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #666;
+        @media (max-height: 600px) {
+            .question-card {
+                padding-top: 20px;
+            }
+            .question-text {
+                margin-bottom: 20px;
+            }
+            .swipe-buttons {
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .swipe-buttons {
+                gap: 30px;
+            }
+            .swipe-btn {
+                width: 75px;
+                height: 75px;
+                font-size: 30px;
+            }
         }
     </style>
 </head>
@@ -339,23 +346,14 @@
         
         <div class="question-container" id="questionContainer">
             <div class="question-card" id="questionCard">
-                <div class="question-content">
-                    <div class="question-number" id="questionNumber">Question 1/7</div>
-                    <div class="question-text" id="questionText"></div>
-                    <div class="true-false-info" id="trueFalseInfo"></div>
-                </div>
-                <div>
-                    <div class="swipe-buttons">
-                        <button class="swipe-btn no-btn" onclick="swipeLeft()">✗</button>
-                        <button class="swipe-btn yes-btn" onclick="swipeRight()">✓</button>
-                    </div>
-                    <div class="btn-labels" id="btnLabels">
-                        <span>No</span>
-                        <span>Yes</span>
-                    </div>
-                    <div class="swipe-hint">Answer honestly, comrade...</div>
+                <div class="question-number" id="questionNumber">Question 1/12</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="swipe-buttons">
+                    <button class="swipe-btn no-btn" onclick="swipeLeft()">✗</button>
+                    <button class="swipe-btn yes-btn" onclick="swipeRight()">✓</button>
                 </div>
             </div>
+            <div class="swipe-hint">Tap ✗ for NO, ✓ for YES</div>
         </div>
         
         <div class="reveal-container" id="revealContainer">
@@ -367,99 +365,71 @@
     </div>
 
     <script>
-        // Large question bank with mix of true/false and yes/no questions
         const questionBank = [
-            {
-                text: "True or False: You've googled 'Karl Marx beard grooming tips' at least once.",
-                type: "true-false",
-                communistAnswer: true
-            },
-            {
-                text: "Do you think billionaires' space rockets are just expensive mid-life crisis toys?",
-                type: "yes-no",
-                communistAnswer: true
-            },
-            {
-                text: "True or False: When you see a 'Private Property' sign, you immediately think 'for now'.",
-                type: "true-false",
-                communistAnswer: true
-            },
-            {
-                text: "Have you ever referred to your friend group as 'the collective'?",
-                type: "yes-no",
-                communistAnswer: true
-            },
-            {
-                text: "True or False: You believe the Monopoly man is the ultimate capitalist villain.",
-                type: "true-false",
-                communistAnswer: true
-            },
-            {
-                text: "Do you get suspicious when someone owns more than one house?",
-                type: "yes-no",
-                communistAnswer: true
-            },
-            {
-                text: "True or False: You've unironically said 'there is no ethical consumption under capitalism' while buying coffee.",
-                type: "true-false",
-                communistAnswer: true
-            },
-            {
-                text: "When playing Monopoly, do you try to implement wealth redistribution rules?",
-                type: "yes-no",
-                communistAnswer: true
-            },
-            {
-                text: "True or False: Red is objectively the best color and this is not up for debate.",
-                type: "true-false",
-                communistAnswer: true
-            },
-            {
-                text: "Do you believe Amazon warehouses should be converted into community centers?",
-                type: "yes-no",
-                communistAnswer: true
-            },
-            {
-                text: "True or False: You've hummed the Soviet anthem 'just to see how it sounds'.",
-                type: "true-false",
-                communistAnswer: true
-            },
-            {
-                text: "Have you ever thought your boss makes too much money for too little work?",
-                type: "yes-no",
-                communistAnswer: true
-            },
-            {
-                text: "True or False: CEOs are just modern-day feudal lords with better PR.",
-                type: "true-false",
-                communistAnswer: true
-            },
-            {
-                text: "Do you think 'sharing economy' apps don't share enough?",
-                type: "yes-no",
-                communistAnswer: true
-            },
-            {
-                text: "True or False: You've fantasized about turning golf courses into public housing.",
-                type: "true-false",
-                communistAnswer: true
-            }
+            "Do you find yourself inexplicably drawn to the color red?",
+            "Have you ever shared your Netflix password with more than 3 people?",
+            "When you see a long queue, do you immediately think 'everyone should get equal portions'?",
+            "Do you get suspicious when someone has TWO yachts?",
+            "Have you ever said 'we' when talking about your roommate's food?",
+            "Does the Monopoly man's monocle make you uncomfortable?",
+            "Do you think birds work for the bourgeoisie?",
+            "Have you ever felt solidarity with your coworkers during a lunch break?",
+            "When splitting the bill, do you insist everyone pays exactly the same?",
+            "Do you own more than one item with a star on it?",
+            "Have you ever hummed the Soviet anthem 'ironically'?",
+            "Does seeing a CEO's salary make your eye twitch involuntarily?",
+            "Do you believe potlucks are the superior form of dining?",
+            "Have you ever referred to your friend group as 'comrades' even jokingly?",
+            "Do you think Jeff Bezos' rocket looks suspiciously like bourgeois overcompensation?",
+            "Have you ever gotten excited about a community garden?",
+            "Do you think 'sharing is caring' applies to everything, including WiFi passwords?",
+            "When someone says 'private property,' do you make air quotes?",
+            "Have you ever daydreamed about collective ownership of your workplace?",
+            "Do you get irrationally angry at self-checkout machines replacing workers?",
+            "Have you ever said 'eat the rich' and meant it (even a little)?",
+            "Do you think landlords are just medieval lords with better marketing?",
+            "Have you ever felt personally attacked by the phrase 'pull yourself up by your bootstraps'?",
+            "Do you believe everyone should have free healthcare, education, and housing?",
+            "Have you ever gotten into a heated argument about wealth inequality at a party?",
+            "Do you think worker cooperatives sound like a great idea?",
+            "Have you ever felt suspicious of people who say 'money can't buy happiness'?",
+            "Do you automatically distrust anyone wearing a three-piece suit?",
+            "Have you ever wondered why we need 47 different types of breakfast cereal?",
+            "Do you think billionaires existing is a policy failure?",
+            "Have you ever gotten emotional reading about labor strikes?",
+            "Do you believe in maximum wage caps for executives?",
+            "Have you ever used the phrase 'seize the means of production' unironically?",
+            "Do you think mutual aid is better than charity?",
+            "Have you ever felt personally victimized by capitalism?",
+            "Do you believe housing should be a human right, not an investment?",
+            "Have you ever gotten excited about public transportation expansion?",
+            "Do you think the stock market is basically legalized gambling?",
+            "Have you ever felt betrayed by a 'we're like family' workplace?",
+            "Do you believe in universal basic income?"
         ];
 
-        let currentQuestions = [];
-        let currentQuestionIndex = 0;
+        let selectedQuestions = [];
+        let currentQuestion = 0;
         let answers = [];
+        const totalQuestions = 12;
 
         function init() {
             createFloatingSymbols();
-            setupQuiz();
+            selectRandomQuestions();
+            showQuestion();
+        }
+
+        function selectRandomQuestions() {
+            // Shuffle the question bank and select random questions
+            const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+            selectedQuestions = shuffled.slice(0, totalQuestions);
         }
 
         function createFloatingSymbols() {
             const container = document.getElementById('floatingSymbols');
             const symbols = ['☭', '★', '☭', '★', '☭'];
             
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 8; i++) {
                 const symbol = document.createElement('div');
                 symbol.className = 'floating-symbol';
                 symbol.textContent = symbols[i % symbols.length];
@@ -470,56 +440,26 @@
             }
         }
 
-        function setupQuiz() {
-            // Randomly select 7 questions from the bank
-            const shuffled = [...questionBank].sort(() => Math.random() - 0.5);
-            currentQuestions = shuffled.slice(0, 7);
-            currentQuestionIndex = 0;
-            answers = [];
-            showQuestion();
-        }
-
         function showQuestion() {
             const card = document.getElementById('questionCard');
             const questionText = document.getElementById('questionText');
             const questionNumber = document.getElementById('questionNumber');
-            const trueFalseInfo = document.getElementById('trueFalseInfo');
-            const btnLabels = document.getElementById('btnLabels');
             const progressFill = document.getElementById('progressFill');
             
-            const question = currentQuestions[currentQuestionIndex];
-            
-            questionText.textContent = question.text;
-            questionNumber.textContent = `Question ${currentQuestionIndex + 1}/7`;
-            progressFill.style.width = ((currentQuestionIndex / 7) * 100) + '%';
-            
-            // Update button labels based on question type
-            if (question.type === 'true-false') {
-                trueFalseInfo.textContent = '';
-                btnLabels.innerHTML = '<span>False</span><span>True</span>';
-            } else {
-                trueFalseInfo.textContent = '';
-                btnLabels.innerHTML = '<span>No</span><span>Yes</span>';
-            }
+            questionText.textContent = selectedQuestions[currentQuestion];
+            questionNumber.textContent = `Question ${currentQuestion + 1}/${totalQuestions}`;
+            progressFill.style.width = ((currentQuestion / totalQuestions) * 100) + '%';
             
             card.classList.remove('hidden', 'swiped-left', 'swiped-right');
         }
 
         function swipeLeft() {
-            const question = currentQuestions[currentQuestionIndex];
-            answers.push({
-                answer: false,
-                alignsWithCommunism: question.communistAnswer === false
-            });
+            answers.push(false);
             animateSwipe('left');
         }
 
         function swipeRight() {
-            const question = currentQuestions[currentQuestionIndex];
-            answers.push({
-                answer: true,
-                alignsWithCommunism: question.communistAnswer === true
-            });
+            answers.push(true);
             animateSwipe('right');
         }
 
@@ -528,8 +468,8 @@
             card.classList.add(`swiped-${direction}`);
             
             setTimeout(() => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < currentQuestions.length) {
+                currentQuestion++;
+                if (currentQuestion < totalQuestions) {
                     showQuestion();
                 } else {
                     showReveal();
@@ -542,43 +482,67 @@
             const revealText = document.getElementById('revealText');
             const revealSubtext = document.getElementById('revealSubtext');
             
-            // Count communist-aligned answers
-            const communistScore = answers.filter(a => a.alignsWithCommunism).length;
+            // Calculate based on answers but add some randomness
+            const yesAnswers = answers.filter(answer => answer).length;
+            const communistScore = (yesAnswers / totalQuestions);
             
-            // 80% chance of being communist, but also consider their answers slightly
-            const baseChance = 0.8;
-            const answerInfluence = (communistScore / 7) * 0.2;
-            const isCommunist = Math.random() < (baseChance + answerInfluence - 0.1);
+            // 75% chance of being communist if you answered yes to more than half
+            const isCommunist = communistScore > 0.5 ? Math.random() < 0.75 : Math.random() < 0.25;
             
             if (isCommunist) {
-                revealText.textContent = "COMRADE DETECTED!";
-                revealSubtext.textContent = "Welcome to the party, товарищ! Your revolutionary spirit burns bright!";
+                const communistMessages = [
+                    "COMRADE DETECTED!",
+                    "REVOLUTIONARY SPOTTED!",
+                    "WORKER HERO IDENTIFIED!",
+                    "TRUE COMRADE CONFIRMED!"
+                ];
+                const communistSubtexts = [
+                    "Welcome to the party, товарищ! Your revolutionary spirit burns bright! ⭐",
+                    "The people's revolution has found another ally! ✊",
+                    "Your class consciousness is showing, comrade! 🚩",
+                    "Together we shall seize the means of production! ☭"
+                ];
+                
+                revealText.textContent = communistMessages[Math.floor(Math.random() * communistMessages.length)];
+                revealSubtext.textContent = communistSubtexts[Math.floor(Math.random() * communistSubtexts.length)];
                 document.body.style.background = "linear-gradient(135deg, #8B0000 0%, #FF0000 100%)";
             } else {
-                revealText.textContent = "CAPITALIST CONFIRMED!";
-                revealSubtext.textContent = "But we're watching you... 👁️";
+                const capitalistMessages = [
+                    "CAPITALIST CONFIRMED!",
+                    "BOURGEOISIE DETECTED!",
+                    "CAPITALIST SPY FOUND!",
+                    "PROPERTY OWNER SPOTTED!"
+                ];
+                const capitalistSubtexts = [
+                    "But we're watching you... 👁️",
+                    "Your love of private property is showing! 💰",
+                    "The revolution will remember this... 📝",
+                    "Perhaps there's still hope for your redemption, comrade! 🤔"
+                ];
+                
+                revealText.textContent = capitalistMessages[Math.floor(Math.random() * capitalistMessages.length)];
+                revealSubtext.textContent = capitalistSubtexts[Math.floor(Math.random() * capitalistSubtexts.length)];
                 document.body.style.background = "linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%)";
             }
             
             revealContainer.classList.add('show');
-            
-            // Add confetti effect
             createConfetti();
         }
 
         function createConfetti() {
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 40; i++) {
                 const confetti = document.createElement('div');
                 confetti.style.position = 'absolute';
-                confetti.style.width = '10px';
-                confetti.style.height = '10px';
+                confetti.style.width = '8px';
+                confetti.style.height = '8px';
                 confetti.style.background = ['#DC143C', '#FFD700', '#FFF'][Math.floor(Math.random() * 3)];
                 confetti.style.left = Math.random() * 100 + '%';
                 confetti.style.top = '-10px';
                 confetti.style.opacity = '0.8';
                 confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
                 confetti.style.animation = `fall ${2 + Math.random() * 2}s linear`;
-                confetti.style.zIndex = '101';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '1000';
                 document.body.appendChild(confetti);
                 
                 setTimeout(() => confetti.remove(), 4000);
@@ -586,9 +550,12 @@
         }
 
         function restart() {
+            currentQuestion = 0;
+            answers = [];
             document.getElementById('revealContainer').classList.remove('show');
             document.body.style.background = "linear-gradient(135deg, #8B0000 0%, #DC143C 100%)";
-            setupQuiz();
+            selectRandomQuestions(); // Get new random questions
+            showQuestion();
         }
 
         // CSS for confetti animation
@@ -601,6 +568,16 @@
             }
         `;
         document.head.appendChild(style);
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
 
         // Initialize the app
         init();
