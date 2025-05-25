@@ -47,9 +47,11 @@
         }
 
         .header h1 {
-            font-size: clamp(20px, 5vw, 24px);
+            font-size: clamp(22px, 5.5vw, 26px);
             margin-bottom: 8px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
 
         .hammer-sickle {
@@ -74,15 +76,16 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            padding: 20px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
             text-align: center;
             background: white;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            padding-top: 40px;
+            padding-top: 30px;
+            padding-bottom: 100px;
         }
 
         .question-card.hidden {
@@ -102,41 +105,46 @@
 
         .question-number {
             color: #DC143C;
-            font-size: 16px;
-            margin-bottom: 20px;
-            font-weight: bold;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .question-text {
-            font-size: clamp(18px, 4.5vw, 22px);
-            color: #333;
-            margin-bottom: 40px;
-            line-height: 1.4;
+            font-size: clamp(22px, 6vw, 28px);
+            color: #2c2c2c;
+            font-weight: 700;
+            line-height: 1.3;
             flex-grow: 1;
             display: flex;
             align-items: center;
             max-width: 100%;
             word-wrap: break-word;
             hyphens: auto;
+            text-align: center;
         }
 
         .swipe-buttons {
             display: flex;
-            gap: 50px;
-            margin-bottom: 40px;
+            gap: 60px;
             justify-content: center;
             width: 100%;
+            margin-top: auto;
+            padding: 0 20px;
         }
 
         .swipe-btn {
-            width: 90px;
-            height: 90px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            font-size: 36px;
+            font-size: 38px;
+            font-weight: 900;
             transition: all 0.2s ease;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             touch-action: manipulation;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -144,18 +152,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .no-btn {
             background: #fff;
             color: #DC143C;
-            border: 4px solid #DC143C;
+            border: 5px solid #DC143C;
         }
 
         .yes-btn {
             background: #DC143C;
             color: white;
-            border: 4px solid #DC143C;
+            border: 5px solid #DC143C;
         }
 
         .swipe-btn:active {
@@ -232,32 +241,36 @@
         }
 
         .reveal-text {
-            font-size: clamp(24px, 7vw, 32px);
-            font-weight: bold;
+            font-size: clamp(26px, 7.5vw, 36px);
+            font-weight: 900;
             margin-bottom: 15px;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
         }
 
         .reveal-subtext {
-            font-size: clamp(16px, 4vw, 18px);
-            opacity: 0.9;
+            font-size: clamp(18px, 4.5vw, 20px);
+            opacity: 0.95;
             margin-bottom: 30px;
             line-height: 1.3;
+            font-weight: 600;
         }
 
         .restart-btn {
             background: white;
             color: #DC143C;
             border: none;
-            padding: 18px 35px;
+            padding: 20px 40px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 800;
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
             touch-action: manipulation;
-            min-height: 54px;
+            min-height: 60px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .restart-btn:active {
@@ -298,12 +311,13 @@
 
         .swipe-hint {
             position: absolute;
-            bottom: 10px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 13px;
-            color: #666;
-            opacity: 0.7;
+            font-size: 14px;
+            color: #888;
+            opacity: 0.8;
+            font-weight: 600;
         }
 
         @media (max-height: 600px) {
@@ -320,12 +334,29 @@
 
         @media (max-width: 350px) {
             .swipe-buttons {
-                gap: 30px;
+                gap: 40px;
+                padding: 0 15px;
             }
             .swipe-btn {
                 width: 75px;
                 height: 75px;
-                font-size: 30px;
+                font-size: 32px;
+            }
+            .question-card {
+                padding: 20px 15px;
+                padding-bottom: 90px;
+            }
+        }
+
+        @media (max-width: 280px) {
+            .swipe-buttons {
+                gap: 30px;
+                padding: 0 10px;
+            }
+            .swipe-btn {
+                width: 65px;
+                height: 65px;
+                font-size: 28px;
             }
         }
     </style>
